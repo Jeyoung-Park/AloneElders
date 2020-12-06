@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AloneElders</string>
+    <string name="sharedPreference_key">sharedPreference_key</string>
+    <string name="sharedPrerfeence_key_isFirst">sharedPreference_key_isFirst</string>
 </resources>
