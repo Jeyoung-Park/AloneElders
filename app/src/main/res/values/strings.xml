@@ -4,4 +4,5 @@
     <string name="sharedPreference_key_isFirst">sharedPreference_key_isFirst</string>
     <string name="sharedPreference_key_name">sharedPreference_key_name</string>
     <string name="sharedPreference_key_phoneNumber">sharedPreference_key_phoneNumber</string>
+    <string name="notification_message">서비스 실행중</string>
 </resources>

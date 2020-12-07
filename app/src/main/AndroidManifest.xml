@@ -3,6 +3,7 @@
     package="com.aloneelders">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +25,7 @@
                 <action android:name="android.intent.action.ACTION_SHUTDOWN" />
             </intent-filter>
         </receiver>
+        <service android:name=".MyService"></service>
     </application>
 
 </manifest>

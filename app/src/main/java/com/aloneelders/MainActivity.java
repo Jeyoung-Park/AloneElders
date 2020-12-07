@@ -1,5 +1,6 @@
 package com.aloneelders;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -7,6 +8,8 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.InsetDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -30,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG="TAG_MainActivity";
     private EditText EditText_name, EditText_phoneNumber;
     private SharedPreferences sharedPref;
-    private Button Button_send_sms;
+    private Button Button_send_sms, Button_start_service, Button_stop_service;
     private String mName, mPhoneNumber;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button_send_sms=findViewById(R.id.Button_send_sms);
+        Button_start_service=findViewById(R.id.Button_startService);
+        Button_stop_service=findViewById(R.id.Button_stopService);
 
         sharedPref = getSharedPreferences(
                 getString(R.string.sharedPreference_key), Context.MODE_PRIVATE);
@@ -60,13 +67,19 @@ public class MainActivity extends AppCompatActivity {
 
         registerScreenLockStateBroadcastReceiver();
 
-        Button_send_sms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
-                sendSMS();
-                Log.d(TAG, "이름: "+mName+"/ 전화번호: "+mPhoneNumber);
-            }
+        Button_send_sms.setOnClickListener(v -> {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
+            sendSMS();
+            Log.d(TAG, "이름: "+mName+"/ 전화번호: "+mPhoneNumber);
+        });
+
+        Button_start_service.setOnClickListener(v -> {
+            Log.d(TAG, "시작하기 누름");
+            startForegroundService(new Intent(this, MyService.class));
+        });
+
+        Button_stop_service.setOnClickListener(v->{
+            stopService(new Intent(this, MyService.class));
         });
 
         Log.d(TAG, "이름: "+sharedPref.getString(getString(R.string.sharedPreference_key_name), "default_name")+"/ 전화번호: "+sharedPref.getString(getString(R.string.sharedPreference_key_phoneNumber), "default_number"));
